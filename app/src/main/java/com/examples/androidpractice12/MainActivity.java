@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -52,27 +51,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public String readData(InputStream is){
-        String data = "";
-        Scanner s = new Scanner(is);
-        while(s.hasNext()) data += s.nextLine() + "\n";
-        s.close();
-        return data;
-    }
-    public void readStream(InputStream in){
-        final String data = readData(in);
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                tv.setText(data);
-            }
-        });
-    }
 
     class mThread extends Thread{
         @Override
         public void run() {
-            Log.d("start","startThread");
             try {
                 URL url = new URL(urlStr);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -91,5 +73,23 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+
+    public void readStream(InputStream in){
+        final String data = readData(in);
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                tv.setText(data);
+            }
+        });
+    }
+    public String readData(InputStream is){
+        String data = "";
+        Scanner s = new Scanner(is);
+        while(s.hasNext()) data += s.nextLine() + "\n";
+        s.close();
+        return data;
+    }
+
     Handler mHandler = new Handler();
 }
